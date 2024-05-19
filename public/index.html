@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>RtcChat</title>
+  <link rel="icon" type="image/png" href="./img/favicon.png" />
+  <link
+          href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,700&display=swap"
+          rel="stylesheet"
+  />
+  <link rel="stylesheet" href="./styles.css" />
+  <script src="https://cdn.jsdelivr.net/lodash/4.10.0/lodash.js"></script>
+</head>
+<body>
+<div class="root">
+  <div class="sidebar">
+    <div class="info" id="info-text">
+      Info text
+    </div>
+    <div class="inputs-row">
+      <input class="key-input" placeholder="Enter chat key" type="text">
+      <button>Start</button>
+    </div>
+  </div>
+  <div class="main-content">
+    <video autoplay class="remote-video" id="remote-video"></video>
+    <video autoplay muted class="local-video" id="local-video"></video>
+  </div>
+</div>
+<script src="./scripts/index.js"></script>
+</body>
+</html>
