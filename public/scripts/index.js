@@ -15,7 +15,6 @@ peerConnection.ontrack = function ({ streams: [stream] }) {
 
 const addIceCandidates = (iceCandidates) => {
     iceCandidates.forEach((candidate) => {
-        console.log(candidate)
         peerConnection.addIceCandidate(new RTCIceCandidate(JSON.parse(candidate)))
     })
 }
@@ -65,6 +64,11 @@ socket.on("offer-by-key-answer", async (data) => {
 });
 socket.on("sent-answer-to-initiator", async ({answer, answerIceCandidates}) => {
     receiveAndApplyAnswer({answer, answerIceCandidates})
+});
+
+socket.on("reconnect", async () => {
+    const chatKey = document.getElementById("key-input").value;
+    socket.emit("get-offer-by-key", {chatKey});
 });
 
 const receiveOfferAndCreateAnswer = async({chatKey, offer, offerIceCandidates}) => {

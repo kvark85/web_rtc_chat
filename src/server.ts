@@ -29,10 +29,6 @@ export class Server {
     this.httpServer = createServer(credentials, this.app);
     this.io = new SocketIOServer(this.httpServer);
     this.data = new Map();
-
-    setInterval(() => {
-      console.log(this.data.size)
-    }, 2000)
   }
 
   private handleRoutes(): void {
@@ -44,15 +40,31 @@ export class Server {
   private handleSocketConnection(): void {
     this.io.on("connection", (socket) => {
       let enteredKey: string
-      socket.on("disconnect", (a, b) => {
-        this.data.delete(enteredKey)
+      let isFirstConnected = false
+
+      socket.on("disconnect", () => {
+        const data = this.data.get(enteredKey);
+        if(isFirstConnected) {
+          if(data?.isSecondConnected) {
+            this.data.delete(enteredKey)
+            socket.broadcast.emit("reconnect");
+          } else {
+            this.data.delete(enteredKey)
+          }
+        } else {
+          if(data?.isSecondConnected) {
+            this.data.delete(enteredKey)
+            socket.broadcast.emit("reconnect");
+          } else {
+            this.data.delete(enteredKey)
+          }
+        }
       });
 
       socket.on("get-offer-by-key", ({chatKey}: {chatKey: string}) => {
         const data = this.data.get(chatKey)
+        enteredKey = chatKey
         if (data) {
-          enteredKey = chatKey
-          console.log('enteredKey', enteredKey)
           socket.emit("offer-by-key-answer", {
             chatKey,
             offer: data.offer,
@@ -72,7 +84,12 @@ export class Server {
         offer: any,
         offerIceCandidates: any,
       }) => {
-        this.data.set(chatKey, {offer, offerIceCandidates})
+        isFirstConnected = true
+        this.data.set(chatKey, {
+          offer,
+          offerIceCandidates,
+          isFirstConnected,
+        })
       });
 
       socket.on("sent-answer-to-server", ({
@@ -85,7 +102,13 @@ export class Server {
         answerIceCandidates: any,
       }) => {
         const data = this.data.get(chatKey)
-        this.data.set(chatKey, {...data, answer, answerIceCandidates})
+        isFirstConnected = false
+        this.data.set(chatKey, {
+          ...data,
+          answer,
+          answerIceCandidates,
+          isSecondConnected: !isFirstConnected,
+        })
         socket.broadcast.emit("sent-answer-to-initiator", {answer, answerIceCandidates});
       });
     });
