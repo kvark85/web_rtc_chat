@@ -8,7 +8,7 @@ export class Server {
   private httpServer: HTTPServer;
   private app: Application;
   private io: SocketIOServer;
-
+  private data: Map<string, any>;
   private readonly HTTPS_PORT = 443;
 
   constructor() {
@@ -28,6 +28,11 @@ export class Server {
 
     this.httpServer = createServer(credentials, this.app);
     this.io = new SocketIOServer(this.httpServer);
+    this.data = new Map();
+
+    setInterval(() => {
+      console.log(this.data.size)
+    }, 2000)
   }
 
   private handleRoutes(): void {
@@ -38,7 +43,53 @@ export class Server {
 
   private handleSocketConnection(): void {
     this.io.on("connection", (socket) => {
-      socket.on("disconnect", () => {});
+      let enteredKey: string
+      socket.on("disconnect", (a, b) => {
+        this.data.delete(enteredKey)
+      });
+
+      socket.on("get-offer-by-key", ({chatKey}: {chatKey: string}) => {
+        const data = this.data.get(chatKey)
+        if (data) {
+          enteredKey = chatKey
+          console.log('enteredKey', enteredKey)
+          socket.emit("offer-by-key-answer", {
+            chatKey,
+            offer: data.initiator.offer,
+            iceCandidates: data.initiator.iceCandidates,
+          });
+        } else {
+          socket.emit("offer-by-key-answer", {chatKey});
+        }
+      });
+
+      socket.on("sent-offer-to-server", ({
+        chatKey,
+        offer,
+        iceCandidates
+      }: {
+        chatKey: string,
+        offer: any,
+        iceCandidates: any,
+      }) => {
+        this.data.set(chatKey, {
+          initiator: {offer, iceCandidates},
+        })
+      });
+
+      socket.on("sent-answer-to-server", ({
+        chatKey,
+        answer,
+        iceCandidates
+      }: {
+        chatKey: string,
+        answer: any,
+        iceCandidates: any,
+      }) => {
+        const data = this.data.get(chatKey)
+        this.data.set(chatKey, {...data, recipient: {answer, iceCandidates}})
+        socket.broadcast.emit("sent-answer-to-initiator", {answer, iceCandidates});
+      });
     });
   }
 
