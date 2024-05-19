@@ -55,8 +55,8 @@ export class Server {
           console.log('enteredKey', enteredKey)
           socket.emit("offer-by-key-answer", {
             chatKey,
-            offer: data.initiator.offer,
-            offerIceCandidates: data.initiator.offerIceCandidates,
+            offer: data.offer,
+            offerIceCandidates: data.offerIceCandidates,
           });
         } else {
           socket.emit("offer-by-key-answer", {chatKey});
@@ -72,9 +72,7 @@ export class Server {
         offer: any,
         offerIceCandidates: any,
       }) => {
-        this.data.set(chatKey, {
-          initiator: {offer, offerIceCandidates},
-        })
+        this.data.set(chatKey, {offer, offerIceCandidates})
       });
 
       socket.on("sent-answer-to-server", ({
@@ -87,7 +85,7 @@ export class Server {
         answerIceCandidates: any,
       }) => {
         const data = this.data.get(chatKey)
-        this.data.set(chatKey, {...data, recipient: {answer, answerIceCandidates}})
+        this.data.set(chatKey, {...data, answer, answerIceCandidates})
         socket.broadcast.emit("sent-answer-to-initiator", {answer, answerIceCandidates});
       });
     });
