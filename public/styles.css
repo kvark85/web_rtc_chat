@@ -24,10 +24,6 @@ body {
 }
 .info {
   margin-bottom: 10px;
-  visibility: hidden;
-}
-.info.show {
-  visibility: initial;
 }
 .inputs-row {
   display: flex;

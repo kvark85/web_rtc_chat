@@ -19,6 +19,11 @@ const addIceCandidates = (iceCandidates) => {
     })
 }
 
+const setInfoText = (text) => {
+    const infoText = document.getElementById('info-text');
+    infoText.innerHTML = text
+}
+
 
 async function getMedia() {
     let stream = null;
@@ -53,16 +58,19 @@ document.getElementById("send-key").addEventListener("click", () => {
 
 socket.on("offer-by-key-answer", async (data) => {
     if(data.offer) {
+        setInfoText('Enjoy secure conversation')
         await receiveOfferAndCreateAnswer({
             chatKey: data.chatKey,
             offer: data.offer,
             offerIceCandidates: data.offerIceCandidates,
         })
     } else {
+        setInfoText('Wait for friend')
         await createOfferAndSend(data.chatKey)
     }
 });
 socket.on("sent-answer-to-initiator", async ({answer, answerIceCandidates}) => {
+    setInfoText('Enjoy secure conversation')
     receiveAndApplyAnswer({answer, answerIceCandidates})
 });
 
