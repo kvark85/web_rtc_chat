@@ -56,7 +56,7 @@ export class Server {
           socket.emit("offer-by-key-answer", {
             chatKey,
             offer: data.initiator.offer,
-            iceCandidates: data.initiator.iceCandidates,
+            offerIceCandidates: data.initiator.offerIceCandidates,
           });
         } else {
           socket.emit("offer-by-key-answer", {chatKey});
@@ -66,29 +66,29 @@ export class Server {
       socket.on("sent-offer-to-server", ({
         chatKey,
         offer,
-        iceCandidates
+        offerIceCandidates
       }: {
         chatKey: string,
         offer: any,
-        iceCandidates: any,
+        offerIceCandidates: any,
       }) => {
         this.data.set(chatKey, {
-          initiator: {offer, iceCandidates},
+          initiator: {offer, offerIceCandidates},
         })
       });
 
       socket.on("sent-answer-to-server", ({
         chatKey,
         answer,
-        iceCandidates
+        answerIceCandidates,
       }: {
         chatKey: string,
         answer: any,
-        iceCandidates: any,
+        answerIceCandidates: any,
       }) => {
         const data = this.data.get(chatKey)
-        this.data.set(chatKey, {...data, recipient: {answer, iceCandidates}})
-        socket.broadcast.emit("sent-answer-to-initiator", {answer, iceCandidates});
+        this.data.set(chatKey, {...data, recipient: {answer, answerIceCandidates}})
+        socket.broadcast.emit("sent-answer-to-initiator", {answer, answerIceCandidates});
       });
     });
   }

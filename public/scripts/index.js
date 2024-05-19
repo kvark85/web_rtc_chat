@@ -15,6 +15,7 @@ peerConnection.ontrack = function ({ streams: [stream] }) {
 
 const addIceCandidates = (iceCandidates) => {
     iceCandidates.forEach((candidate) => {
+        console.log(candidate)
         peerConnection.addIceCandidate(new RTCIceCandidate(JSON.parse(candidate)))
     })
 }
@@ -56,36 +57,39 @@ socket.on("offer-by-key-answer", async (data) => {
         await receiveOfferAndCreateAnswer({
             chatKey: data.chatKey,
             offer: data.offer,
-            iceCandidates: data.iceCandidates,
+            offerIceCandidates: data.offerIceCandidates,
         })
     } else {
         await createOfferAndSend(data.chatKey)
     }
 });
-socket.on("sent-answer-to-initiator", async ({answer, iceCandidates}) => {
-    receiveAndApplyAnswer({answer, iceCandidates})
+socket.on("sent-answer-to-initiator", async ({answer, answerIceCandidates}) => {
+    receiveAndApplyAnswer({answer, answerIceCandidates})
 });
 
-const receiveOfferAndCreateAnswer = async({chatKey, offer, iceCandidates: remoteIceCandidates}) => {
+const receiveOfferAndCreateAnswer = async({chatKey, offer, offerIceCandidates}) => {
     await peerConnection.setRemoteDescription(new RTCSessionDescription(offer));
     const answer = await peerConnection.createAnswer();
     await peerConnection.setLocalDescription(answer);
-    addIceCandidates(remoteIceCandidates)
+    addIceCandidates(offerIceCandidates)
     await new Promise((resolve) => setTimeout(resolve, TIMEOUT));
-    socket.emit("sent-answer-to-server", {chatKey, answer, iceCandidates});
+    socket.emit("sent-answer-to-server", {
+        chatKey, answer,
+        answerIceCandidates: iceCandidates
+    });
 }
 
 const createOfferAndSend = async(chatKey) => {
     const offer = await peerConnection.createOffer();
     await peerConnection.setLocalDescription(offer);
     await new Promise((resolve) => setTimeout(resolve, TIMEOUT));
-    socket.emit("sent-offer-to-server", {chatKey, offer, iceCandidates});
+    socket.emit("sent-offer-to-server", {chatKey, offer, offerIceCandidates: iceCandidates});
 }
 
-const receiveAndApplyAnswer = async({answer, iceCandidates}) => {
+const receiveAndApplyAnswer = async({answer, answerIceCandidates}) => {
     const remoteDesc = new RTCSessionDescription(answer);
     await peerConnection.setRemoteDescription(remoteDesc);
-    addIceCandidates(iceCandidates)
+    addIceCandidates(answerIceCandidates)
 }
 
 
