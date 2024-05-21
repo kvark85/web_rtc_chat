@@ -79,6 +79,10 @@ socket.on("reconnect", async () => {
     socket.emit("get-offer-by-key", {chatKey});
 });
 
+socket.on("chat-with-chosen-key-exist", async () => {
+    setInfoText('Chat with chosen chat key already exist. Please, try another chat key.')
+});
+
 const receiveOfferAndCreateAnswer = async({chatKey, offer, offerIceCandidates}) => {
     await peerConnection.setRemoteDescription(new RTCSessionDescription(offer));
     const answer = await peerConnection.createAnswer();

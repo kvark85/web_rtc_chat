@@ -40,29 +40,22 @@ export class Server {
   private handleSocketConnection(): void {
     this.io.on("connection", (socket) => {
       let enteredKey: string
-      let isFirstConnected = false
 
       socket.on("disconnect", () => {
         const data = this.data.get(enteredKey);
-        if(isFirstConnected) {
-          if(data?.isSecondConnected) {
-            this.data.delete(enteredKey)
-            socket.broadcast.emit("reconnect");
-          } else {
-            this.data.delete(enteredKey)
-          }
-        } else {
-          if(data?.isSecondConnected) {
-            this.data.delete(enteredKey)
-            socket.broadcast.emit("reconnect");
-          } else {
-            this.data.delete(enteredKey)
-          }
-        }
+        this.data.delete(enteredKey)
+        data?.firstConnectedSocket?.emit("reconnect");
+        data?.secondConnectedSocket?.emit("reconnect");
       });
 
       socket.on("get-offer-by-key", ({chatKey}: {chatKey: string}) => {
         const data = this.data.get(chatKey)
+
+        if(data?.firstConnectedSocket && data?.secondConnectedSocket) {
+          socket.emit("chat-with-chosen-key-exist");
+          return
+        }
+
         enteredKey = chatKey
         if (data) {
           socket.emit("offer-by-key-answer", {
@@ -84,11 +77,10 @@ export class Server {
         offer: any,
         offerIceCandidates: any,
       }) => {
-        isFirstConnected = true
         this.data.set(chatKey, {
           offer,
           offerIceCandidates,
-          isFirstConnected,
+          firstConnectedSocket: socket,
         })
       });
 
@@ -102,14 +94,13 @@ export class Server {
         answerIceCandidates: any,
       }) => {
         const data = this.data.get(chatKey)
-        isFirstConnected = false
         this.data.set(chatKey, {
           ...data,
           answer,
           answerIceCandidates,
-          isSecondConnected: !isFirstConnected,
+          secondConnectedSocket: socket,
         })
-        socket.broadcast.emit("sent-answer-to-initiator", {answer, answerIceCandidates});
+        data?.firstConnectedSocket?.emit("sent-answer-to-initiator", {answer, answerIceCandidates});
       });
     });
   }
