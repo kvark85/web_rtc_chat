@@ -13,7 +13,6 @@ const ICE_config= {
         {'url': 'numb.viagenie.ca:3478'},
         {'url': 'stun.12connect.com:3478'},
         {'url': 'stun.12voip.com:3478'},
-        {'url': 'stun.1und1.de:3478'},
         {'url': 'stun.2talk.co.nz:3478'},
         {'url': 'stun.2talk.com:3478'},
         {'url': 'stun.3clogic.com:3478'},
