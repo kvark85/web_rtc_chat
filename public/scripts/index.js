@@ -218,8 +218,6 @@ const ICE_config= {
         {'url': 'stun.zoiper.com:3478'},
         {'url': 'stun1.faktortel.com.au:3478'},
         {'url': 'stun1.voiceeclipse.net:3478'},
-        {'url': 'stun3.l.google.com:19302'},
-        {'url': 'stun4.l.google.com:19302'},
         {'url': 'stunserver.org:3478'},
         {
             'url': 'turn:192.158.29.39:3478?transport=udp',
