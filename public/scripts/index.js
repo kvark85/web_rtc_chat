@@ -1,7 +1,6 @@
 const ICE_config= {
     'iceServers': [
         {'url': 'stun:stun.l.google.com:19302'},
-        {'url': '23.21.150.121:3478'},
         {'url': 'iphone-stun.strato-iphone.de:3478'},
         {'url': 'numb.viagenie.ca:3478'},
         {'url': 'stun.12connect.com:3478'},
