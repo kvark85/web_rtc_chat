@@ -86,7 +86,6 @@ const ICE_config= {
         {'url': 'stun.justvoip.com:3478'},
         {'url': 'stun.kanet.ru:3478'},
         {'url': 'stun.kiwilink.co.nz:3478'},
-        {'url': 'stun.l.google.com:19302'},
         {'url': 'stun.linea7.net:3478'},
         {'url': 'stun.linphone.org:3478'},
         {'url': 'stun.liveo.fr:3478'},
