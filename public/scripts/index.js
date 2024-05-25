@@ -97,7 +97,7 @@ const receiveOfferAndCreateAnswer = async({chatKey, offer, offerIceCandidates}) 
 }
 
 const createOfferAndSend = async(chatKey) => {
-    console.log('a; chatKey =', JchatKey)
+    console.log('a; chatKey =', chatKey)
     const offer = await peerConnection.createOffer();
     await peerConnection.setLocalDescription(offer);
     await new Promise((resolve) => setTimeout(resolve, TIMEOUT));
