@@ -1,7 +1,6 @@
 const ICE_config= {
     'iceServers': [
         {'url': 'stun:stun.l.google.com:19302'},
-        {'url': 'stun.l.google.com:19302'},
         {'url': 'stun1.l.google.com:19302'},
         {'url': 'stun2.l.google.com:19302'},
         {'url': 'stun3.l.google.com:19302'},
