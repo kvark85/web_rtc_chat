@@ -19,6 +19,15 @@ getLocation().then((closestAddr) => {
     const ICE_config= {
         'iceServers': [
             {'url': `stun:${closestAddr}`},
+            {'url': `stun:stun.root-1.de:3478`},
+            {'url': `stun:stun.signalwire.com:3478`},
+            {'url': `stun:stun.comrex.com:3478`},
+            {'url': `stun:stun.labs.net:3478`},
+            {'url': `stun:stun.streamnow.ch:3478`},
+            {'url': `stun:stun.nfon.net:3478`},
+            {'url': `stun:stun.megatel.si:3478`},
+            {'url': `stun:stun.junet.se:3478`},
+            {'url': `stun:stun.stadtwerke-eutin.de:3478`},
             {
                 'url': 'turn:192.158.29.39:3478?transport=udp',
                 'credential': 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
