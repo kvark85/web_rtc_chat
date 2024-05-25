@@ -82,6 +82,7 @@ getLocation().then((closestAddr) => {
 
     peerConnection.onicecandidate = function(event) {
         if (event.candidate) {
+            console.log('AAAAAA onicecandidate', JSON.stringify(event.candidate))
             iceCandidates.push(JSON.stringify(event.candidate))
         }
     };
