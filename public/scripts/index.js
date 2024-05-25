@@ -67,7 +67,6 @@ const ICE_config= {
         {'url': 'stun.freeswitch.org:3478'},
         {'url': 'stun.freevoipdeal.com:3478'},
         {'url': 'stun.gmx.de:3478'},
-        {'url': 'stun.gmx.net:3478'},
         {'url': 'stun.gradwell.com:3478'},
         {'url': 'stun.halonet.pl:3478'},
         {'url': 'stun.hellonanu.com:3478'},
