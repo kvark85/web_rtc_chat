@@ -18,7 +18,7 @@ const getLocation = async () => {
 getLocation().then((closestAddr) => {
     const ICE_config= {
         'iceServers': [
-            {'url': closestAddr},
+            {'url': `stun:${closestAddr}`},
             {
                 'url': 'turn:192.158.29.39:3478?transport=udp',
                 'credential': 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
@@ -31,7 +31,7 @@ getLocation().then((closestAddr) => {
             }
         ]
     }
-
+    console.log(ICE_config)
 
     const peerConnection = new RTCPeerConnection(ICE_config);
     const socket = io.connect("/");
