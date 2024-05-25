@@ -84,6 +84,7 @@ socket.on("chat-with-chosen-key-exist", async () => {
 });
 
 const receiveOfferAndCreateAnswer = async({chatKey, offer, offerIceCandidates}) => {
+    console.log('b; answer =', JSON.stringify({chatKey, offer}, undefined, 2))
     await peerConnection.setRemoteDescription(new RTCSessionDescription(offer));
     const answer = await peerConnection.createAnswer();
     await peerConnection.setLocalDescription(answer);
@@ -96,6 +97,7 @@ const receiveOfferAndCreateAnswer = async({chatKey, offer, offerIceCandidates}) 
 }
 
 const createOfferAndSend = async(chatKey) => {
+    console.log('a; chatKey =', JchatKey)
     const offer = await peerConnection.createOffer();
     await peerConnection.setLocalDescription(offer);
     await new Promise((resolve) => setTimeout(resolve, TIMEOUT));
@@ -103,6 +105,7 @@ const createOfferAndSend = async(chatKey) => {
 }
 
 const receiveAndApplyAnswer = async({answer, answerIceCandidates}) => {
+    console.log('c; answer =', JSON.stringify(answer, undefined, 2))
     const remoteDesc = new RTCSessionDescription(answer);
     await peerConnection.setRemoteDescription(remoteDesc);
     addIceCandidates(answerIceCandidates)
