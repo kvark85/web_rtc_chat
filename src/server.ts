@@ -22,8 +22,8 @@ export class Server {
   private initialize(): void {
     this.app = express();
 
-    const privateKey = fs.readFileSync("./localhost-key.pem", "utf8");
-    const certificate = fs.readFileSync("./localhost.pem", "utf8");
+    const privateKey = fs.readFileSync("./3.70.45.17-key.pem", "utf8");
+    const certificate = fs.readFileSync("./3.70.45.17.pem", "utf8");
     const credentials = { key: privateKey, cert: certificate };
 
     this.httpServer = createServer(credentials, this.app);

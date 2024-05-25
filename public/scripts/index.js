@@ -12,10 +12,10 @@ peerConnection.ontrack = function ({ streams: [stream] }) {
         remoteVideo.srcObject = stream;
     }
 };
-
+/*candidate*/
 const addIceCandidates = (iceCandidates) => {
-    iceCandidates.forEach((candidate) => {
-        peerConnection.addIceCandidate(new RTCIceCandidate(JSON.parse(candidate)))
+    iceCandidates.forEach(() => {
+        // peerConnection.addIceCandidate(new RTCIceCandidate(JSON.parse(candidate)))
     })
 }
 
